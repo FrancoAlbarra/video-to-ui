@@ -236,6 +236,8 @@ def sample_color(fr, box, pick, frac=None):
         return sorted(px_all, key=key)[:k]
     if pick == "ink":
         s = topk(lambda c: c[0] + c[1] + c[2], 1 / 30)
+    elif pick == "lite":                       # brightest pixels — for white text on dark UIs
+        s = topk(lambda c: -(c[0] + c[1] + c[2]), 1 / 30)
     elif pick == "red":
         s = topk(lambda c: -(c[0] - (c[1] + c[2]) / 2), 1 / 30)
     elif pick == "sat":
@@ -338,7 +340,7 @@ def main():
                              "diff", "regions"])
     ap.add_argument("--box", default="0,0,1,1")
     ap.add_argument("--thr", type=int, default=110)
-    ap.add_argument("--pick", choices=["ink", "red", "sat", "mean"], default="ink")
+    ap.add_argument("--pick", choices=["ink", "lite", "red", "sat", "mean"], default="ink")
     ap.add_argument("--colors", type=int, default=8)
     ap.add_argument("--bands", type=int, default=8)
     ap.add_argument("--fit", action="store_true", help="fit a cubic-bezier to the measured progress")
